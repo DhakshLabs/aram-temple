@@ -1,0 +1,28 @@
+.how__steps {
+  position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(16px, 2vw, 24px);
+  margin-top: clamp(40px, 5vw, 64px);
+}
+/* A thin line joining the step numbers. */
+.how__steps::before { content: ''; position: absolute; top: 22px; left: 12.5%; right: 12.5%; height: 1px; background: var(--rule-strong); }
+
+.how__step { position: relative; display: grid; justify-items: center; gap: 12px; text-align: center; padding-inline: 8px; }
+.how__num {
+  display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 8px;
+  border: 1px solid rgb(88 17 12 / .25); border-radius: 50%; background: var(--paper);
+  font-size: var(--text-sm); font-weight: 600; color: var(--maroon); font-variant-numeric: tabular-nums;
+}
+.how__title { font-family: var(--serif); font-weight: 500; font-size: 1.6rem; line-height: 1.1; }
+.how__text { max-width: 18em; font-size: var(--text-sm); line-height: 1.65; color: var(--ink-2); }
+
+@media (max-width: 900px) {
+  .how__steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 40px; }
+  .how__steps::before { display: none; }
+}
+@media (max-width: 560px) {
+  .how__steps { grid-template-columns: 1fr; gap: 0; max-width: 28rem; margin-inline: auto; }
+  .how__steps::before { display: block; top: 22px; bottom: 22px; left: 22px; right: auto; width: 1px; height: auto; }
+  .how__step { grid-template-columns: 44px 1fr; justify-items: start; column-gap: 18px; row-gap: 4px; padding: 0 0 28px; text-align: left; }
+  .how__num { grid-row: 1 / span 2; margin: 0; }
+  .how__title { align-self: center; font-size: 1.4rem; }
+  .how__text { grid-column: 2; max-width: none; }
+}

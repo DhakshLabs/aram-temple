@@ -1,0 +1,66 @@
+/*
+ * ARAM ERP for Temples — design tokens.
+ * Palette: white pages with one soft warm tint for alternate sections, charcoal for the
+ * hero and footer, Sacred Maroon (#58110C, from the ARAM brand guide) as the only strong
+ * accent, with muted gold used sparingly for detail.
+ */
+:root {
+  /* Daylight */
+  --ivory: #faf7f2;
+  --paper: #ffffff;
+  --sand: #f1ebe1;
+  --stone: #d8ccba;
+  --stone-deep: #b9aa93;
+
+  /* Interior */
+  --granite: #5d5750;
+  --charcoal: #24201c;
+  --night: #14110f;
+  --night-2: #1c1815;
+
+  /* Accents */
+  --maroon: #58110c;
+  --maroon-2: #74201a;
+  --gold: #a88a57;
+  --gold-soft: #c9b48d;
+  --bronze: #8c6a45;
+
+  /* Text */
+  --ink: #221d19;
+  --ink-2: #4a423b;
+  --muted: #7a7065;
+  --on-dark: #f3ece1;
+  --on-dark-2: rgba(243, 236, 225, .72);
+  --on-dark-3: rgba(243, 236, 225, .46);
+
+  /* Lines */
+  --rule: rgba(34, 29, 25, .1);
+  --rule-strong: rgba(34, 29, 25, .2);
+  --rule-dark: rgba(243, 236, 225, .16);
+
+  /* Type */
+  --serif: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+  --sans: 'Geist', 'Helvetica Neue', Arial, sans-serif;
+  --display: 'Cinzel', 'Trajan Pro', Georgia, serif;
+  --tamil: 'Noto Serif Tamil', serif;
+
+  --text-xs: .75rem;
+  --text-sm: .875rem;
+  --text-md: 1rem;
+  --text-lg: clamp(1.0625rem, .98rem + .3vw, 1.25rem);
+  --statement: clamp(2rem, 1.5rem + 1.9vw, 3.25rem);
+  --statement-sm: clamp(1.6rem, 1.3rem + 1.2vw, 2.25rem);
+  --section-y: clamp(72px, 10vw, 128px);
+  --radius: 16px;
+  --shadow: 0 1px 2px rgb(34 29 25 / .04), 0 12px 32px -12px rgb(34 29 25 / .12);
+
+  /* Layout */
+  --gutter: clamp(20px, 4.5vw, 72px);
+  --max: 1360px;
+  --header-h: 72px;
+
+  /* Motion */
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --ease-io: cubic-bezier(.65, 0, .35, 1);
+  --slow: 1.1s;
+}

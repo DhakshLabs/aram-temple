@@ -1,0 +1,143 @@
+/*
+ * --p    journey position 0–1 (frame 01 → frame 11), written from requestAnimationFrame
+ * --hold 0–1 through the final hold, used to hand off into the page
+ */
+.hero {
+  --p: 0;
+  --hold: 0;
+  --fin: clamp(0, (var(--p) - .92) / .06, 1);
+  --runway: 1000svh;
+  position: relative;
+  height: calc(100svh + var(--runway));
+  background: var(--night);
+  color: var(--on-dark);
+}
+
+/* Soft stop at the start of the final hold, so the CTA settles on screen instead of
+   scrolling straight past (html has scroll-snap-type: y proximity; scroll-padding-top
+   is the header height, hence the offset). */
+.hero__pause {
+  position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none;
+  top: calc(var(--runway) * (1 - var(--hold-share, .15)) + var(--header-h) + 3svh);
+  scroll-snap-align: start;
+}
+
+.hero__stage { position: sticky; top: 0; height: 100svh; overflow: hidden; isolation: isolate; }
+
+.hero__media, .hero__poster, .hero__canvas, .hero__shade { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero__poster { object-fit: cover; object-position: 50% 50%; }
+.hero__media:has(.hero__canvas.is-ready) .hero__poster { opacity: 0; }
+.hero__canvas { opacity: 0; transition: opacity .6s var(--ease); }
+.hero__canvas.is-ready { opacity: 1; }
+
+/* Legibility: a quiet scrim for the header and the lower-left copy, deepening for the finale. */
+.hero__shade {
+  background:
+    linear-gradient(180deg, rgb(12 10 9 / .5) 0%, rgb(12 10 9 / 0) 22%),
+    linear-gradient(0deg, rgb(12 10 9 / .62) 0%, rgb(12 10 9 / 0) 48%),
+    linear-gradient(90deg, rgb(12 10 9 / calc(.15 + var(--fin) * .45)) 0%, rgb(12 10 9 / 0) 70%);
+}
+
+/* Opening — the film's title card */
+.hero__opening { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: clamp(0, 1 - var(--p) / .03, 1); }
+.hero__place {
+  position: absolute; left: var(--gutter); bottom: clamp(32px, 7vh, 72px);
+  display: grid; gap: 6px;
+  font-family: var(--display); font-size: clamp(.8rem, .7rem + .3vw, 1rem); letter-spacing: .28em; text-transform: uppercase;
+  animation: hero-in 1.8s var(--ease) .2s both;
+}
+.hero__place span { font-family: var(--serif); font-style: italic; font-size: 1.15em; letter-spacing: .02em; text-transform: none; color: var(--on-dark-2); }
+.hero__cue {
+  position: absolute; left: 50%; bottom: clamp(28px, 6vh, 64px); translate: -50% 0;
+  display: grid; justify-items: center; gap: 14px;
+  font-size: var(--text-xs); letter-spacing: .24em; text-transform: uppercase; color: var(--on-dark-2);
+  animation: hero-in 1.8s var(--ease) .7s both;
+}
+.hero__cue span { width: 1px; height: 44px; background: linear-gradient(var(--on-dark), transparent); transform-origin: top; animation: cue 2.4s var(--ease-io) infinite; }
+
+@keyframes hero-in { from { opacity: 0; transform: translateY(12px); } }
+@keyframes cue { 0% { transform: scaleY(0); opacity: 1; } 60% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
+
+/* Story beats — each fades in and out over its stretch of the journey */
+.hero__beats { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.beat {
+  --in: clamp(0, (var(--p) - var(--from)) / .035, 1);
+  --out: clamp(0, (var(--to) - var(--p)) / .035, 1);
+  position: absolute; left: var(--gutter); bottom: clamp(48px, 12vh, 120px);
+  width: min(36rem, calc(100% - 2 * var(--gutter)));
+  opacity: calc(var(--in) * var(--out));
+  transform: translateY(calc((1 - var(--in)) * 20px - (1 - var(--out)) * 20px));
+}
+.beat__title { font-family: var(--serif); font-weight: 400; font-size: clamp(2rem, 1.3rem + 2.6vw, 3.6rem); line-height: 1.04; letter-spacing: -.01em; text-wrap: balance; }
+.beat__text { margin-top: 18px; max-width: 30em; font-size: var(--text-lg); line-height: 1.55; color: var(--on-dark-2); text-wrap: pretty; }
+.beat .hero__eyebrow { margin-bottom: 20px; }
+
+/* Finale — ARAM ERP */
+.hero__finale {
+  position: absolute; z-index: 4; left: var(--gutter); top: 50%;
+  width: min(44rem, calc(100% - 2 * var(--gutter)));
+  opacity: var(--fin);
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+.hero__eyebrow { display: flex; align-items: center; gap: 14px; font-family: var(--display); font-size: var(--text-xs); letter-spacing: .3em; text-transform: uppercase; color: var(--gold-soft); }
+.hero__eyebrow::before { content: ''; width: 36px; height: 1px; background: currentColor; }
+.hero__title { margin-top: 22px; font-family: var(--serif); font-weight: 400; font-size: clamp(2.6rem, 1.5rem + 4vw, 5.4rem); line-height: 1; letter-spacing: -.015em; text-wrap: balance; }
+.hero__title em { display: block; font-style: italic; color: var(--gold-soft); }
+.hero__lede { margin-top: 24px; max-width: 32em; font-size: var(--text-lg); color: var(--on-dark-2); text-wrap: pretty; }
+.hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; margin-top: 36px; }
+.hero__link { color: var(--on-dark); }
+.hero__actions .button--light {
+  min-height: 56px;
+  padding-inline: 28px;
+  border: 1px solid rgb(255 255 255 / .56);
+  background: linear-gradient(135deg, #f5eddd, #d8c49d);
+  box-shadow: 0 12px 36px rgb(0 0 0 / .24), inset 0 1px rgb(255 255 255 / .75);
+  font-weight: 600;
+}
+.hero__actions .button--light:hover { background: linear-gradient(135deg, #fffaf0, #e9d8b7); transform: translateY(-2px); }
+.hero__actions .hero__link { text-underline-offset: 6px; text-decoration-color: rgb(255 255 255 / .42); }
+
+/* Journey index */
+.journey-index {
+  position: absolute; z-index: 4; right: var(--gutter); top: 50%; translate: 0 -50%;
+  display: grid; grid-template-columns: auto 1px; gap: 0 20px; align-items: center;
+  opacity: calc(1 - var(--hold));
+}
+.journey-index__count { grid-column: 1 / -1; margin-bottom: 18px; text-align: right; font-size: var(--text-xs); letter-spacing: .2em; color: var(--on-dark-3); font-variant-numeric: tabular-nums; }
+.journey-index ol { display: grid; gap: 2px; }
+.journey-index button {
+  display: block; width: 100%; min-height: 32px; text-align: right;
+  font-size: var(--text-xs); letter-spacing: .14em; text-transform: uppercase; color: var(--on-dark-3);
+  transition: color .4s var(--ease);
+}
+.journey-index button:hover, .journey-index button[aria-current] { color: var(--on-dark); }
+.journey-index__rail { position: relative; align-self: stretch; grid-row: 2; grid-column: 2; background: var(--rule-dark); }
+.journey-index__rail i { position: absolute; inset: 0; background: var(--gold-soft); transform: scaleY(var(--p)); transform-origin: top; }
+
+.hero__dev {
+  position: absolute; z-index: 4; right: var(--gutter); bottom: 20px;
+  padding: 6px 10px; border: 1px dashed var(--rule-dark); border-radius: 4px;
+  font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--on-dark-3);
+}
+
+/* Reduced motion: one composed still, no runway. */
+.hero[data-static] { --fin: 1; height: 100svh; min-height: 640px; }
+.hero[data-static] :is(.hero__opening, .hero__beats, .journey-index, .hero__pause) { display: none; }
+.hero[data-static] .hero__finale { opacity: 1; }
+
+@media (max-width: 900px) {
+  .journey-index { top: auto; bottom: 0; left: 0; right: 0; translate: none; display: block; height: 2px; }
+  .journey-index__count, .journey-index ol { display: none; }
+  .journey-index__rail { position: absolute; inset: 0; }
+  .journey-index__rail i { transform: scaleX(var(--p)); transform-origin: left; }
+  .hero__dev { left: var(--gutter); right: auto; bottom: 14px; }
+}
+
+@media (max-width: 640px) {
+  .hero { --runway: 820svh; }
+  .hero__place { bottom: auto; top: calc(var(--header-h) + 20px); }
+  .beat { bottom: clamp(56px, 10vh, 96px); }
+  .hero__finale { top: auto; bottom: clamp(48px, 8vh, 80px); transform: none; }
+  .hero__actions .button { width: 100%; justify-content: center; }
+}

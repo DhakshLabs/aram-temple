@@ -1,0 +1,41 @@
+.intro__grid {
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center; gap: clamp(40px, 5vw, 80px);
+}
+.intro__copy { display: grid; gap: 20px; justify-items: start; }
+.intro__points { display: grid; gap: 12px; margin-top: 8px; }
+.intro__points li { display: flex; align-items: flex-start; gap: 12px; font-size: var(--text-md); color: var(--ink-2); }
+.intro__points svg { flex: none; margin-top: 4px; color: var(--maroon); }
+.intro__link { color: var(--maroon); }
+
+/* Dashboard on a laptop, with one floating note. */
+.showcase { position: relative; }
+.showcase__device { position: relative; width: 100%; }
+.showcase::before { content: ''; position: absolute; left: 10%; right: 10%; bottom: -3%; height: 10%; border-radius: 50%; background: radial-gradient(closest-side, rgb(34 29 25 / .18), transparent); filter: blur(12px); }
+
+.showcase__chip {
+  position: absolute; z-index: 1; left: -2%; bottom: 10%;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 18px 12px 14px; border: 1px solid var(--rule); border-radius: 14px;
+  background: rgb(255 255 255 / .96); box-shadow: var(--shadow);
+  animation: chip-float 6s var(--ease-io) infinite;
+}
+.showcase__chip > span:last-child { display: grid; gap: 2px; }
+.showcase__chip strong { font-size: var(--text-sm); font-weight: 600; line-height: 1.25; color: var(--ink); white-space: nowrap; }
+.showcase__chip small { font-size: .6875rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+
+.showcase__dot { position: relative; flex: none; width: 9px; height: 9px; border-radius: 50%; background: #2f8a5b; }
+.showcase__dot::after { content: ''; position: absolute; inset: -5px; border-radius: 50%; background: rgb(47 138 91 / .25); animation: dot-pulse 2.4s var(--ease) infinite; }
+
+@keyframes chip-float { 50% { transform: translateY(-6px); } }
+@keyframes dot-pulse { 0% { transform: scale(.6); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
+
+@media (max-width: 900px) {
+  .intro__grid { grid-template-columns: 1fr; }
+  .showcase { max-width: 640px; width: 100%; margin-inline: auto; }
+}
+@media (max-width: 640px) {
+  .showcase__chip { left: 0; bottom: -4%; padding: 9px 12px 9px 11px; gap: 10px; border-radius: 12px; }
+  .showcase__chip strong { font-size: .8125rem; }
+  .showcase__chip small { font-size: .625rem; }
+}
